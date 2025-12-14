@@ -111,7 +111,7 @@ export default function About() {
     
     {/* WhatsApp Contact */}
     <a
-      href="https://wa.me/94764622740?text=Hello!%20I'm%20interested%20in%20your%20handcrafted%20lamps.%20Can%20you%20provide%20more%20information?"
+      href="https://wa.me/94774576201?text=Hello!%20I'm%20interested%20in%20your%20handcrafted%20lamps.%20Can%20you%20provide%20more%20information?"
       target="_blank"
       rel="noopener noreferrer"
       className="flex items-start space-x-3 group cursor-pointer hover:bg-green-50 p-2 rounded-md transition-colors"
