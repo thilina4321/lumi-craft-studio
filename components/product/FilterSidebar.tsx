@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
 interface FilterSidebarProps {
+  filters?: Record<string, string[]>;
   onFilterChange: (filters: Record<string, string[]>) => void;
+  onClearAll?: () => void;
 }
 
-const FilterSidebar = ({ onFilterChange }: FilterSidebarProps) => {
+const FilterSidebar = ({ filters, onFilterChange, onClearAll }: FilterSidebarProps) => {
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
     designType: true,
     lampType: true,
@@ -17,6 +19,13 @@ const FilterSidebar = ({ onFilterChange }: FilterSidebarProps) => {
     lampType: [],
     specialServices: [],
   });
+
+  // Sync with parent filters when they change
+  useEffect(() => {
+    if (filters) {
+      setSelectedFilters(filters);
+    }
+  }, [filters]);
 
   const filterSections = {
     designType: {
@@ -54,16 +63,18 @@ const FilterSidebar = ({ onFilterChange }: FilterSidebarProps) => {
   };
 
   const clearAllFilters = () => {
-    setSelectedFilters({
+    const emptyFilters = {
       designType: [],
       lampType: [],
       specialServices: [],
-    });
-    onFilterChange({
-      designType: [],
-      lampType: [],
-      specialServices: [],
-    });
+    };
+    setSelectedFilters(emptyFilters);
+    
+    if (onClearAll) {
+      onClearAll();
+    } else {
+      onFilterChange(emptyFilters);
+    }
   };
 
   const hasActiveFilters = Object.values(selectedFilters).some(
