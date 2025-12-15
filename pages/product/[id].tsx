@@ -5,16 +5,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { 
   ChevronLeft, 
-  Heart, 
   Share2, 
-  ShoppingCart, 
-  Minus, 
-  Plus,
   Truck,
   Shield,
   RefreshCw,
   Star,
-  Check
+  Check,
+  MessageCircle
 } from 'lucide-react';
 
 interface ProductDetails {
@@ -74,7 +71,6 @@ export default function ProductDetail() {
   const router = useRouter();
   const { id } = router.query;
   
-  const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
   const [activeTab, setActiveTab] = useState<'features' | 'specifications' | 'philosophy' | 'reviews'>('features');
@@ -102,18 +98,13 @@ export default function ProductDetail() {
     product.image
   ];
 
-  const handleQuantityChange = (delta: number) => {
-    setQuantity(Math.max(1, quantity + delta));
-  };
+  
 
   const formatPrice = (price: number) => {
     return `Rs. ${price.toFixed(2)}`;
   };
 
-  const handleAddToCart = () => {
-    // Implement your add to cart logic
-    alert(`Added ${quantity} ${product.name}(s) to cart!`);
-  };
+  
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -131,6 +122,33 @@ export default function ProductDetail() {
       navigator.clipboard.writeText(window.location.href);
       alert('Link copied to clipboard!');
     }
+  };
+
+  const handleWhatsAppClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation(); // Prevent navigation when clicking WhatsApp button
+
+    const {category, designType, price} = product;
+    
+    // Format the WhatsApp message with line breaks
+    const message = `Hi! I'm interested in this product:
+
+
+*${name}*
+
+📦 Category: ${category}${designType ? `\n🎨 Design: ${designType}` : ''}
+💰 Price: Rs. ${price.toFixed(2)}
+
+I would like to know more details about this product.`;
+
+    // Encode the message for URL
+    const encodedMessage = encodeURIComponent(message);
+    
+    // WhatsApp URL (works for both web and mobile)
+    const whatsappUrl = `https://wa.me/94774576201?text=${encodedMessage}`;
+    
+    // Open in new tab
+    window.open(whatsappUrl, '_blank');
   };
 
   return (
@@ -169,14 +187,7 @@ export default function ProductDetail() {
                 />
                 {/* Favorite & Share Icons */}
                 <div className="absolute top-4 right-4 flex gap-2">
-                  <button
-                    onClick={() => setIsFavorite(!isFavorite)}
-                    className="p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-md hover:scale-110 transition-transform"
-                  >
-                    <Heart 
-                      className={`w-5 h-5 ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-600'}`}
-                    />
-                  </button>
+                 
                   <button 
                     onClick={handleShare}
                     className="p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-md hover:scale-110 transition-transform"
@@ -268,49 +279,18 @@ export default function ProductDetail() {
                 </div>
               )}
 
-              {/* Quantity Selector */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Quantity
-                </label>
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center border border-gray-300 rounded-lg">
-                    <button
-                      onClick={() => handleQuantityChange(-1)}
-                      className="p-3 hover:bg-gray-50 transition-colors"
-                    >
-                      <Minus className="w-4 h-4 text-gray-600" />
-                    </button>
-                    <span className="px-6 py-3 font-medium text-gray-900 border-x border-gray-300">
-                      {quantity}
-                    </span>
-                    <button
-                      onClick={() => handleQuantityChange(1)}
-                      className="p-3 hover:bg-gray-50 transition-colors"
-                    >
-                      <Plus className="w-4 h-4 text-gray-600" />
-                    </button>
-                  </div>
-                  {quantity > 1 && (
-                    <span className="text-sm text-gray-500">
-                      Total: {formatPrice(product.price * quantity)}
-                    </span>
-                  )}
-                </div>
-              </div>
+              
 
               {/* Action Buttons */}
               <div className="flex gap-3">
                 <button 
-                  onClick={handleAddToCart}
+                  onClick={handleWhatsAppClick}
                   className="flex-1 bg-primary-600 text-white px-6 py-4 rounded-lg font-semibold hover:bg-primary-700 transition-colors flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
                 >
-                  <ShoppingCart className="w-5 h-5" />
-                  Add to Cart
-                </button>
-                <button className="px-6 py-4 border-2 border-primary-600 text-primary-600 rounded-lg font-semibold hover:bg-primary-50 transition-colors">
+                  <MessageCircle className="w-5 h-5" />
                   Buy Now
                 </button>
+                
               </div>
 
               {/* Benefits */}
@@ -320,8 +300,8 @@ export default function ProductDetail() {
                     <Truck className="w-5 h-5 text-green-600" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-900">Free Shipping</p>
-                    <p className="text-xs text-gray-500">On orders over $100</p>
+                    <p className="text-sm font-medium text-gray-900">Free Delivery</p>
+                    <p className="text-xs text-gray-500">On orders over Rs.10,000</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
