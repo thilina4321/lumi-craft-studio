@@ -13,10 +13,10 @@ export default function Home() {
   const allProducts = [
     {
       id: '1',
-      name: 'L-vamp Lamp',
-      price: 290.00,
-      image: 'https://ii1.pepperfry.com/media/catalog/product/g/r/800x880/grey-fabric-shade-table-lamp-with-ceramic-base-by-aapno-rajasthan-grey-fabric-shade-table-lamp-with--xcgf8b.jpg',
-      category: 'Bedside lamp',
+      name: 'The Botanical Beacon',
+      price: 12000.00,
+      image: '/lamps/Botanical_Beacon.jpeg',
+      category: 'Detail',
       designType: 'Drum',
     },
     {
